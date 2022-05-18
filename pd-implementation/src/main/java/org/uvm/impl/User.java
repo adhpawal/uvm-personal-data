@@ -3,8 +3,12 @@ package org.uvm.impl;
 import org.uvm.PersonalData;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class User {
+
+    private final static Logger LOGGER = Logger.getLogger(User.class.getName());
 
     @PersonalData
     private String ssn;
@@ -55,5 +59,11 @@ public class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public void test(){
+        System.out.println(this.ssn);
+        LOGGER.log(Level.INFO, this.ssn);
+        LOGGER.log(Level.INFO, this.fullName);
     }
 }
