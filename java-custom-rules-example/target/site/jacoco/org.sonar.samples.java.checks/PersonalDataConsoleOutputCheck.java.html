@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PersonalDataConsoleOutputCheck.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SonarQube Java :: Documentation :: Custom Rules Example</a> &gt; <a href="index.source.html" class="el_package">org.sonar.samples.java.checks</a> &gt; <span class="el_source">PersonalDataConsoleOutputCheck.java</span></div><h1>PersonalDataConsoleOutputCheck.java</h1><pre class="source lang-java linenums">package org.sonar.samples.java.checks;
+
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+import org.sonar.check.Rule;
+import org.sonar.plugins.java.api.JavaFileScanner;
+import org.sonar.plugins.java.api.JavaFileScannerContext;
+import org.sonar.plugins.java.api.semantic.Symbol;
+import org.sonar.plugins.java.api.tree.BaseTreeVisitor;
+import org.sonar.plugins.java.api.tree.MemberSelectExpressionTree;
+import org.sonar.plugins.java.api.tree.Tree;
+
+import javax.annotation.Nonnull;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+@Rule(key = &quot;PersonalDataRule2&quot;)
+<span class="nc" id="L18">public class PersonalDataConsoleOutputCheck extends BaseTreeVisitor implements JavaFileScanner {</span>
+
+<span class="nc" id="L20">    private static final Logger LOGGER = Loggers.get(PersonalDataConsoleOutputCheck.class);</span>
+
+
+    static final String RULE_DESCRIPTION = &quot;You must not access  field which is annotated by &lt;code&gt;@PersonalData&lt;/code&gt; for Logging Purpose.&quot;;
+
+    private JavaFileScannerContext context;
+
+<span class="nc" id="L27">    private final Predicate&lt;Symbol&gt; hasVisibleForTestingPredicate = new LocatePersonalAnnotation();</span>
+
+    @Override
+    public void scanFile(final JavaFileScannerContext ctx) {
+<span class="nc" id="L31">        context = ctx;</span>
+<span class="nc" id="L32">        scan(ctx.getTree());</span>
+<span class="nc" id="L33">    }</span>
+
+    @Override
+    public void visitMemberSelectExpression(final @Nonnull MemberSelectExpressionTree tree) {
+<span class="nc bnc" id="L37" title="All 6 branches missed.">        if (tree.parent()!=null &amp;&amp; (tree.parent().firstToken().text().contains(&quot;System&quot;) || tree.parent().firstToken().text().contains(&quot;LOGGER&quot;))){</span>
+<span class="nc" id="L38">            final Symbol symbol = tree.identifier().symbol();</span>
+<span class="nc" id="L39">            LOGGER.info(symbol.name());</span>
+<span class="nc" id="L40">            addIssueIfNeeded(symbol, tree);</span>
+        }
+<span class="nc" id="L42">        super.visitMemberSelectExpression(tree);</span>
+<span class="nc" id="L43">    }</span>
+
+    private void addIssueIfNeeded(final Symbol symbol, final Tree tree) {
+<span class="nc" id="L46">        LOGGER.info(tree.firstToken().text());</span>
+<span class="nc" id="L47">        final Optional&lt;Symbol&gt; symbolWithVisibleForTesting = Optional.ofNullable(symbol).filter(hasVisibleForTestingPredicate);</span>
+<span class="nc" id="L48">        symbolWithVisibleForTesting.ifPresent(s -&gt; context.addIssue(tree.firstToken().line(), this, String.format(RULE_DESCRIPTION)));</span>
+<span class="nc" id="L49">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

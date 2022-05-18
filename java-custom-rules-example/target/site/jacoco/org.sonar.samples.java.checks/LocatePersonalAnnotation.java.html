@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LocatePersonalAnnotation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SonarQube Java :: Documentation :: Custom Rules Example</a> &gt; <a href="index.source.html" class="el_package">org.sonar.samples.java.checks</a> &gt; <span class="el_source">LocatePersonalAnnotation.java</span></div><h1>LocatePersonalAnnotation.java</h1><pre class="source lang-java linenums">package org.sonar.samples.java.checks;
+
+import org.sonar.plugins.java.api.semantic.Symbol;
+import org.sonar.plugins.java.api.semantic.SymbolMetadata;
+import org.sonar.plugins.java.api.semantic.SymbolMetadata.AnnotationInstance;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+class LocatePersonalAnnotation implements Predicate&lt;Symbol&gt; {
+    private final Predicate&lt;AnnotationInstance&gt; isVisibleForTestingAnnotation;
+
+    LocatePersonalAnnotation(){
+<span class="nc" id="L18">        this(new IsPersonalAnnotationPresent());</span>
+<span class="nc" id="L19">    }</span>
+
+<span class="nc" id="L21">    LocatePersonalAnnotation(final @Nonnull Predicate&lt;AnnotationInstance&gt; isVisibleForTestingAnnotation) {</span>
+<span class="nc" id="L22">        this.isVisibleForTestingAnnotation = isVisibleForTestingAnnotation;</span>
+<span class="nc" id="L23">    }</span>
+
+    @Override
+    public boolean test(final @Nullable Symbol symbol) {
+<span class="nc" id="L27">        final Optional&lt;Collection&lt;AnnotationInstance&gt;&gt; annotationsOptional = Optional.ofNullable(symbol).//</span>
+<span class="nc" id="L28">                map(Symbol::metadata).//</span>
+<span class="nc" id="L29">                map(SymbolMetadata::annotations);</span>
+<span class="nc" id="L30">        final Collection&lt;AnnotationInstance&gt; annotations = annotationsOptional.orElse(Collections.emptyList());</span>
+<span class="nc" id="L31">        final boolean hasVisibleForTesting = annotations.stream().anyMatch(isVisibleForTestingAnnotation);</span>
+<span class="nc" id="L32">        return hasVisibleForTesting;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

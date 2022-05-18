@@ -1,5 +1,7 @@
 package org.sonar.samples.java.checks;
 
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
 import org.sonar.plugins.java.api.IssuableSubscriptionVisitor;
 import org.sonar.plugins.java.api.tree.ExpressionTree;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @Rule(key = "PersonalDataRule")
 public class PersonalDataRule extends IssuableSubscriptionVisitor {
+    private static final Logger LOGGER = Loggers.get(PersonalDataRule.class);
 
     @Override
     public List<Tree.Kind> nodesToVisit() {
@@ -20,9 +23,10 @@ public class PersonalDataRule extends IssuableSubscriptionVisitor {
 
     @Override
     public void visitNode(Tree tree) {
+
         MemberSelectExpressionTree mset = (MemberSelectExpressionTree) tree;
         if (isOutOrErr(mset) && isSystem(mset.expression())) {
-            reportIssue(tree, "Replace this use of System.out or System.err by a logger. Fields annotated with @PersonalData cannot be used in standard output.");
+            reportIssue(tree, "Replace this use of System.out or System.err by a Logger.");
         }
     }
 

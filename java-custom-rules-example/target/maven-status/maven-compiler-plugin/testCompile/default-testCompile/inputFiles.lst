@@ -1,0 +1,14 @@
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/checks/SpringControllerRequestMappingEntityRuleTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/utils/FilesUtils.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/MyJavaRulesPluginTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/checks/MyCustomSubscriptionRuleTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/utils/StringUtilsTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/checks/AvoidSuperClassRuleTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/checks/SecurityAnnotationMandatoryRuleTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/MyJavaFileCheckRegistrarTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/checks/AvoidTreeListRuleTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/checks/NoIfStatementInTestsRuleTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/MyJavaRulesDefinitionTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/checks/AvoidAnnotationRuleTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/checks/AvoidMethodDeclarationRuleTest.java
+/home/novelty/Development/uvm-personal-data/java-custom-rules-example/src/test/java/org/sonar/samples/java/checks/AvoidBrandInMethodNamesRuleTest.java
