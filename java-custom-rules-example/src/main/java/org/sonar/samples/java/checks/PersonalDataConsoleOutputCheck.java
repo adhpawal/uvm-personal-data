@@ -17,10 +17,7 @@ import java.util.function.Predicate;
 public class PersonalDataConsoleOutputCheck extends BaseTreeVisitor implements JavaFileScanner {
 
     private static final Logger LOGGER = Loggers.get(PersonalDataConsoleOutputCheck.class);
-
-
-    static final String RULE_DESCRIPTION = "You must not access  field which is annotated by <code>@PersonalData</code> for Logging Purpose.";
-
+    static final String RULE_DESCRIPTION = "You must not access field which is annotated by <code>@PersonalData</code> for Logging Purpose.";
     private JavaFileScannerContext context;
 
     private final Predicate<Symbol> hasVisibleForTestingPredicate = new LocatePersonalAnnotation();

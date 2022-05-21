@@ -41,60 +41,66 @@ import java.util.function.Predicate;
 <span class="nc" id="L41">    }</span>
 
     @Override
+    public void visitMethodInvocation(MethodInvocationTree tree) {
+<span class="nc" id="L45">        LOGGER.info(&quot;Yay, Check out Method Invocation : &quot; + tree.parent().parent().firstToken().text() + &quot;Method :: &quot; +tree.methodSelect().firstToken().text() + &quot; Or another Method : &quot; + tree.symbol().name());</span>
+<span class="nc" id="L46">        super.visitMethodInvocation(tree);</span>
+<span class="nc" id="L47">    }</span>
+
+    @Override
     public void visitMemberSelectExpression(final @Nonnull MemberSelectExpressionTree tree) {
-<span class="nc" id="L45">        final Symbol symbol = tree.identifier().symbol();</span>
-<span class="nc bnc" id="L46" title="All 6 branches missed.">        if (tree.parent()!=null &amp;&amp; (tree.parent().parent().firstToken().text().contains(&quot;System&quot;) || tree.parent().parent().firstToken().text().contains(&quot;LOGGER&quot;))){</span>
-<span class="nc" id="L47">            LOGGER.info(symbol.name());</span>
-<span class="nc" id="L48">            addIssueIfNeeded(symbol, tree);</span>
+<span class="nc" id="L51">        final Symbol symbol = tree.identifier().symbol();</span>
+<span class="nc bnc" id="L52" title="All 6 branches missed.">        if (tree.parent()!=null &amp;&amp; (tree.parent().parent().firstToken().text().contains(&quot;System&quot;) || tree.parent().parent().firstToken().text().contains(&quot;LOGGER&quot;))){</span>
+<span class="nc" id="L53">            LOGGER.info(symbol.name());</span>
+<span class="nc" id="L54">            addIssueIfNeeded(symbol, tree);</span>
         }
-<span class="nc" id="L50">        super.visitMemberSelectExpression(tree);</span>
-<span class="nc" id="L51">    }</span>
+<span class="nc" id="L56">        super.visitMemberSelectExpression(tree);</span>
+<span class="nc" id="L57">    }</span>
 
     private void addIssueIfNeeded(final Symbol symbol, final Tree tree) {
-<span class="nc" id="L54">        final Optional&lt;Symbol&gt; symbolWithVisibleForTesting = Optional.ofNullable(symbol).filter(hasVisibleForTestingPredicate);</span>
-<span class="nc" id="L55">        symbolWithVisibleForTesting.ifPresent(s -&gt; context.addIssue(tree.firstToken().line(), this, String.format(RULE_DESCRIPTION)));</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L60">        final Optional&lt;Symbol&gt; symbolWithVisibleForTesting = Optional.ofNullable(symbol).filter(hasVisibleForTestingPredicate);</span>
+<span class="nc" id="L61">        symbolWithVisibleForTesting.ifPresent(s -&gt; context.addIssue(tree.firstToken().line(), this, String.format(RULE_DESCRIPTION)));</span>
+<span class="nc" id="L62">    }</span>
 
     private Boolean checkGetter(String fieldName, MethodTree methodTree) {
-<span class="nc" id="L59">        AtomicReference&lt;Boolean&gt; result = new AtomicReference&lt;&gt;(Boolean.FALSE);</span>
-<span class="nc" id="L60">        firstAndOnlyStatement(methodTree)</span>
-<span class="nc" id="L61">                .filter(statementTree -&gt; statementTree.is(Tree.Kind.RETURN_STATEMENT))</span>
-<span class="nc" id="L62">                .map(statementTree -&gt; ((ReturnStatementTree) statementTree).expression())</span>
-<span class="nc" id="L63">                .flatMap(PersonalDataConsoleOutputCheck::symbolFromExpression)</span>
-<span class="nc bnc" id="L64" title="All 2 branches missed.">                .filter(returnSymbol -&gt; !fieldName.equals(returnSymbol.name()))</span>
-<span class="nc" id="L65">                .ifPresent(returnedSymbol-&gt; result.set(Boolean.TRUE));</span>
-<span class="nc" id="L66">        return result.get();</span>
+<span class="nc" id="L65">        AtomicReference&lt;Boolean&gt; result = new AtomicReference&lt;&gt;(Boolean.FALSE);</span>
+<span class="nc" id="L66">        firstAndOnlyStatement(methodTree)</span>
+<span class="nc" id="L67">                .filter(statementTree -&gt; statementTree.is(Tree.Kind.RETURN_STATEMENT))</span>
+<span class="nc" id="L68">                .map(statementTree -&gt; ((ReturnStatementTree) statementTree).expression())</span>
+<span class="nc" id="L69">                .flatMap(PersonalDataConsoleOutputCheck::symbolFromExpression)</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                .filter(returnSymbol -&gt; !fieldName.equals(returnSymbol.name()))</span>
+<span class="nc" id="L71">                .ifPresent(returnedSymbol-&gt; result.set(Boolean.TRUE));</span>
+<span class="nc" id="L72">        return result.get();</span>
     }
 
     private static Optional&lt;StatementTree&gt; firstAndOnlyStatement(MethodTree methodTree) {
-<span class="nc" id="L70">        return Optional.ofNullable(methodTree.block())</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">                .filter(b -&gt; b.body().size() == 1)</span>
-<span class="nc" id="L72">                .map(b -&gt; b.body().get(0));</span>
+<span class="nc" id="L76">        return Optional.ofNullable(methodTree.block())</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                .filter(b -&gt; b.body().size() == 1)</span>
+<span class="nc" id="L78">                .map(b -&gt; b.body().get(0));</span>
     }
 
     private static Optional&lt;Symbol&gt; symbolFromExpression(ExpressionTree returnExpression) {
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (returnExpression.is(Tree.Kind.IDENTIFIER)) {</span>
-<span class="nc" id="L77">            return Optional.of(((IdentifierTree) returnExpression).symbol());</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (returnExpression.is(Tree.Kind.IDENTIFIER)) {</span>
+<span class="nc" id="L83">            return Optional.of(((IdentifierTree) returnExpression).symbol());</span>
         }
-<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (returnExpression.is(Tree.Kind.MEMBER_SELECT)) {</span>
-<span class="nc" id="L80">            return Optional.of(((MemberSelectExpressionTree) returnExpression).identifier().symbol());</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (returnExpression.is(Tree.Kind.MEMBER_SELECT)) {</span>
+<span class="nc" id="L86">            return Optional.of(((MemberSelectExpressionTree) returnExpression).identifier().symbol());</span>
         }
-<span class="nc" id="L82">        return Optional.empty();</span>
+<span class="nc" id="L88">        return Optional.empty();</span>
     }
 
     private static Optional&lt;String&gt; isGetterLike(Symbol methodSymbol) {
-<span class="nc" id="L86">        String methodName = methodSymbol.name();</span>
-<span class="nc bnc" id="L87" title="All 4 branches missed.">        if (methodName.length() &gt; 3 &amp;&amp; methodName.startsWith(&quot;get&quot;)) {</span>
-<span class="nc" id="L88">            return Optional.of(lowerCaseFirstLetter(methodName.substring(3)));</span>
+<span class="nc" id="L92">        String methodName = methodSymbol.name();</span>
+<span class="nc bnc" id="L93" title="All 4 branches missed.">        if (methodName.length() &gt; 3 &amp;&amp; methodName.startsWith(&quot;get&quot;)) {</span>
+<span class="nc" id="L94">            return Optional.of(lowerCaseFirstLetter(methodName.substring(3)));</span>
         }
-<span class="nc bnc" id="L90" title="All 4 branches missed.">        if (methodName.length() &gt; 2 &amp;&amp; methodName.startsWith(&quot;is&quot;)) {</span>
-<span class="nc" id="L91">            return Optional.of(lowerCaseFirstLetter(methodName.substring(2)));</span>
+<span class="nc bnc" id="L96" title="All 4 branches missed.">        if (methodName.length() &gt; 2 &amp;&amp; methodName.startsWith(&quot;is&quot;)) {</span>
+<span class="nc" id="L97">            return Optional.of(lowerCaseFirstLetter(methodName.substring(2)));</span>
         }
-<span class="nc" id="L93">        return Optional.empty();</span>
+<span class="nc" id="L99">        return Optional.empty();</span>
     }
 
     private static String lowerCaseFirstLetter(String methodName) {
-<span class="nc" id="L97">        return Character.toLowerCase(methodName.charAt(0)) + methodName.substring(1);</span>
+<span class="nc" id="L103">        return Character.toLowerCase(methodName.charAt(0)) + methodName.substring(1);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
